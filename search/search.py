@@ -91,31 +91,31 @@ def depthFirstSearch(problem: SearchProblem):
     tree = util.Stack()
 
     start = problem.getStartState()
-    movements = []
+    visited = set()
 
     if problem.isGoalState(start):
-        return movements
+        return []
     
 
-    tree = dfs_traverse(problem, start, tree)
+    dfs_traverse(problem, start, tree, [])
 
     while not tree.isEmpty():
 
         node = tree.pop()
         state = node[0]
         actions = node[1]
-        movements.append(actions)
         if problem.isGoalState(state):
-            return movements
-        else:
-            tree.push(dfs_traverse(problem, state, tree))
+            return actions
+        elif state not in visited:
+            visited.add(state)
+            dfs_traverse(problem, state, tree, actions)
 
     util.raiseNotDefined()
 
-def dfs_traverse(problem, parent, stackTree):
+def dfs_traverse(problem, parent, stackTree, path):
     children = problem.getSuccessors(parent) #list of triples
     for child in children:
-        node = (child[0], child[1])
+        node = (child[0], path + [child[1]])
         stackTree.push(node)
     return stackTree
 
