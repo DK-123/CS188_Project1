@@ -89,10 +89,55 @@ def depthFirstSearch(problem: SearchProblem):
     "*** YOUR CODE HERE ***"
     util.raiseNotDefined()
 
+
 def breadthFirstSearch(problem: SearchProblem):
     """Search the shallowest nodes in the search tree first."""
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    #util.raiseNotDefined()
+
+    '''
+    Notes:
+    - for BFS we use a queue (FIFO - first in first out) because we are searching level by level
+    - visit ALL nodes on each level before moving on to the next level
+    - need to keep track of 2 things: search nodes we visited AND search nodes that are in the queue that need to be visited 
+    - first we push the start (root) into the queue
+    - once we pop from the queue, we need to store the visited nodes -> use a set to avoid duplicates?
+    - push children nodes into the queue
+    - *every time we pop and mark a node as visited, we push children nodes of that node into the queue
+    -  a search node must contain not only a state but also the information necessary to reconstruct the path (plan)
+       which gets to that state
+    '''
+    
+    # first we need to initialize the start State and its actions and the queue
+    queue = util.Queue()
+    startState = problem.getStartState()
+    actions = []
+    first_search_node = (startState, actions)
+    queue.push(first_search_node) 
+    visited_states = set() 
+
+    # keep going until our queue is empty
+    while not queue.isEmpty():
+        current_node = queue.pop()
+        current_state = current_node[0]
+        current_actions = current_node[1]
+
+        if problem.isGoalState(current_state):
+            return current_actions
+        
+        visited_states.add(current_state)
+        
+        #successors are basically the children nodes and they contain 3 things: successor state, action, stepCost
+        successors = problem.getSuccessors(current_state) 
+
+        for next_state, action, stepCost in successors:
+            if next_state not in visited_states:
+                visited_states.add(next_state)
+                new_actions = current_actions + [action]
+                next_node = (next_state, new_actions)
+                queue.push(next_node)
+
+    return actions
 
 def uniformCostSearch(problem: SearchProblem):
     """Search the node of least total cost first."""
@@ -117,3 +162,4 @@ bfs = breadthFirstSearch
 dfs = depthFirstSearch
 astar = aStarSearch
 ucs = uniformCostSearch
+
