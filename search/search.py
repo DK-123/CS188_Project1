@@ -102,7 +102,8 @@ def depthFirstSearch(problem: SearchProblem):
     while not tree.isEmpty():
 
         node = tree.pop()
-        state, actions = node[0], node[1]
+        state = node[0]
+        actions = node[1]
         movements.append(actions)
         if problem.isGoalState(state):
             return movements
