@@ -97,7 +97,6 @@ def depthFirstSearch(problem: SearchProblem):
         return []
     
     tree.push((start, []))
-    visited.add(start)
 
 
     while not tree.isEmpty():
@@ -106,20 +105,28 @@ def depthFirstSearch(problem: SearchProblem):
         state = node[0]
         actions = node[1]
 
+        if state not in visited:
+            visited.add(state)
+
+            if problem.getSuccessors(state):
+                children = problem.getSuccessors(state)
+
+                for child in reversed(children):
+                    new_state = child[0]
+                    action = child[1]
+                    cost = child[2]
+
+                    if new_state not in visited:
+                        new_node = (new_state, actions + [action])
+                        tree.push(new_node)
+                        # visited.add(child)
+
         if problem.isGoalState(state):
             return actions
         
-        children = problem.getSuccessors(state)
-            
-        for child in children:
-            new = (child[0], actions + [child[1]])
-            if child[0] not in visited:
-                tree.push(new)
-                visited.add(child[0])
+        
 
-
-
-    util.raiseNotDefined()
+    return []
 
 
 def breadthFirstSearch(problem: SearchProblem):
