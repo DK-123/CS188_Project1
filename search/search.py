@@ -81,12 +81,44 @@ def depthFirstSearch(problem: SearchProblem):
 
     To get started, you might want to try some of these simple commands to
     understand the search problem that is being passed in:
+    """
 
     print("Start:", problem.getStartState())
     print("Is the start a goal?", problem.isGoalState(problem.getStartState()))
     print("Start's successors:", problem.getSuccessors(problem.getStartState()))
-    """
+    
     "*** YOUR CODE HERE ***"
+    tree = util.Stack()
+
+    start = problem.getStartState()
+    visited = set()
+
+    if problem.isGoalState(start):
+        return []
+    
+    tree.push((start, []))
+    visited.add(start)
+
+
+    while not tree.isEmpty():
+
+        node = tree.pop()
+        state = node[0]
+        actions = node[1]
+
+        if problem.isGoalState(state):
+            return actions
+        
+        children = problem.getSuccessors(state)
+            
+        for child in children:
+            new = (child[0], actions + [child[1]])
+            if child[0] not in visited:
+                tree.push(new)
+                visited.add(child[0])
+
+
+
     util.raiseNotDefined()
 
 
