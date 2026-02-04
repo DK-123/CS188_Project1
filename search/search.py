@@ -206,7 +206,7 @@ def uniformCostSearch(problem: SearchProblem):
             successors = problem.getSuccessors(state)
         
         for next_state, action, stepCost in successors:
-            if next_state not in successors:
+            if next_state not in visited_states:
                 new_actions = actions + [action]
                 pq.push((next_state, new_actions, totCost + stepCost), totCost + stepCost)
     return actions
