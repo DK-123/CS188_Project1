@@ -88,41 +88,41 @@ def depthFirstSearch(problem: SearchProblem):
     print("Start's successors:", problem.getSuccessors(problem.getStartState()))
     
     "*** YOUR CODE HERE ***"
-    tree = util.Stack()
+    # tree = util.Stack()
 
-    start = problem.getStartState()
-    visited = set()
+    # start = problem.getStartState()
+    # visited = set()
 
-    if problem.isGoalState(start):
-        return []
+    # if problem.isGoalState(start):
+    #     return []
     
-    tree.push((start, []))
+    # tree.push((start, []))
 
 
-    while not tree.isEmpty():
+    # while not tree.isEmpty():
 
-        node = tree.pop()
-        state = node[0]
-        actions = node[1]
+    #     node = tree.pop()
+    #     state = node[0]
+    #     actions = node[1]
 
-        if state not in visited:
-            visited.add(state)
+    #     if state not in visited:
+    #         visited.add(state)
 
-            if problem.getSuccessors(state):
-                children = problem.getSuccessors(state)
+    #         if problem.getSuccessors(state):
+    #             children = problem.getSuccessors(state)
 
-                for child in reversed(children):
-                    new_state = child[0]
-                    action = child[1]
-                    cost = child[2]
+    #             for child in reversed(children):
+    #                 new_state = child[0]
+    #                 action = child[1]
+    #                 cost = child[2]
 
-                    if new_state not in visited:
-                        new_node = (new_state, actions + [action])
-                        tree.push(new_node)
-                        # visited.add(child)
+    #                 if new_state not in visited:
+    #                     new_node = (new_state, actions + [action])
+    #                     tree.push(new_node)
+    #                     # visited.add(child)
 
-        if problem.isGoalState(state):
-            return actions
+    #     if problem.isGoalState(state):
+    #         return actions
              
 
     return []
@@ -183,15 +183,16 @@ def uniformCostSearch(problem: SearchProblem):
     pq = util.PriorityQueue()
     startState = problem.getStartState()
     actions = []
-
-    first_node = (startState, actions)
     totCost = 0
-    pq.push((first_node, actions, totCost), 0) 
+    pq.push((startState, actions, totCost), 0) 
     visited_states = set()
 
 
     while not pq.isEmpty():
-        state, actions, totCost = pq.pop()
+        node = pq.pop()
+        state = node[0]
+        actions = node[1]
+        totCost = node[2]
 
         if state not in visited_states:
             visited_states.add(state)
@@ -205,8 +206,7 @@ def uniformCostSearch(problem: SearchProblem):
             successors = problem.getSuccessors(state)
         
         for next_state, action, stepCost in successors:
-            if next_state not in visited_states:
-                visited_states.add(next_state)
+            if next_state not in successors:
                 new_actions = actions + [action]
                 pq.push((next_state, new_actions, totCost + stepCost), totCost + stepCost)
     return actions
