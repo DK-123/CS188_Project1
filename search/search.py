@@ -88,45 +88,103 @@ def depthFirstSearch(problem: SearchProblem):
     print("Start's successors:", problem.getSuccessors(problem.getStartState()))
     
     "*** YOUR CODE HERE ***"
-    tree = util.Stack()
+    stack = util.Stack()
+    startState = problem.getStartState()
+    actions = []
+    first_search_node = (startState, actions)
+    print (f"Before pushing: {stack}")
+    stack.push(first_search_node) 
+    print (f"After pushing: {stack}")
+    visited_states = set() 
 
-    start = problem.getStartState()
-    visited = set()
+    # keep going until our queue is empty
+    while not stack.isEmpty():
+        current_node = stack.pop()
+        print (f"After Popping: {stack}")
 
-    if problem.isGoalState(start):
-        return []
+        current_state = current_node[0]
+        current_actions = current_node[1]
+        
+        print(f"{current_state} current_state NOT updated")
+
+        if problem.isGoalState(current_state):
+            return current_actions
+        
+        if current_state not in visited_states:
+            visited_states.add(current_state)
+        if current_state in visited_states:
+            print(f"{current_state} current_state is updated to visited")
+            #print(f"After adding Visited States: {visited_states}")
+           
+        #successors are basically the children nodes and they contain 3 things: successor state, action, stepCost
+        successors = problem.getSuccessors(current_state) 
+
+        print(f"Successors: {successors}")
+
+        for next_state, action, stepCost in successors:
+            print(f"Next state: {next_state}")
+            if next_state not in visited_states:
+                # visited_states.add(next_state)
+                new_actions = current_actions + [action]
+                next_node = (next_state, new_actions)
+                stack.push(next_node)
+
+    return actions
+
+# def depthFirstSearch(problem: SearchProblem):
+#     """
+#     Search the deepest nodes in the search tree first.
+
+#     Your search algorithm needs to return a list of actions that reaches the
+#     goal. Make sure to implement a graph search algorithm.
+
+#     To get started, you might want to try some of these simple commands to
+#     understand the search problem that is being passed in:
+#     """
+
+#     print("Start:", problem.getStartState())
+#     print("Is the start a goal?", problem.isGoalState(problem.getStartState()))
+#     print("Start's successors:", problem.getSuccessors(problem.getStartState()))
     
-    tree.push((start, []))
+#     "*** YOUR CODE HERE ***"
+    # tree = util.Stack()
+
+    # start = problem.getStartState()
+    # visited = set()
+
+    # if problem.isGoalState(start):
+    #     return []
+    
+    # tree.push((start, []))
 
 
-    while not tree.isEmpty():
+    # while not tree.isEmpty():
 
-        node = tree.pop()
-        state = node[0]
-        actions = node[1]
+    #     node = tree.pop()
+    #     state = node[0]
+    #     actions = node[1]
 
-        if state not in visited:
-            visited.add(state)
+    #     if state not in visited:
+    #         visited.add(state)
 
-            if problem.getSuccessors(state):
-                children = problem.getSuccessors(state)
+    #         if problem.getSuccessors(state):
+    #             children = problem.getSuccessors(state)
 
-                for child in reversed(children):
-                    new_state = child[0]
-                    action = child[1]
-                    cost = child[2]
+    #             for child in reversed(children):
+    #                 new_state = child[0]
+    #                 action = child[1]
+    #                 cost = child[2]
 
-                    if new_state not in visited:
-                        new_node = (new_state, actions + [action])
-                        tree.push(new_node)
-                        # visited.add(child)
+    #                 if new_state not in visited:
+    #                     new_node = (new_state, actions + [action])
+    #                     tree.push(new_node)
+    #                     # visited.add(child)
 
-        if problem.isGoalState(state):
-            return actions
-        
-        
+    #     if problem.isGoalState(state):
+    #         return actions
+             
 
-    return []
+   # return []
 
 
 def breadthFirstSearch(problem: SearchProblem):
@@ -181,7 +239,36 @@ def breadthFirstSearch(problem: SearchProblem):
 def uniformCostSearch(problem: SearchProblem):
     """Search the node of least total cost first."""
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    pq = util.PriorityQueue()
+    startState = problem.getStartState()
+    actions = []
+    totCost = 0
+    pq.push((startState, actions, totCost), 0) 
+    visited_states = set()
+
+
+    while not pq.isEmpty():
+        node = pq.pop()
+        state = node[0]
+        actions = node[1]
+        totCost = node[2]
+
+        if state not in visited_states:
+            visited_states.add(state)
+        else:
+            continue
+
+        if problem.isGoalState(state):
+            return actions
+        
+        if problem.getSuccessors(state):
+            successors = problem.getSuccessors(state)
+        
+        for next_state, action, stepCost in successors:
+            if next_state not in visited_states:
+                new_actions = actions + [action]
+                pq.push((next_state, new_actions, totCost + stepCost), totCost + stepCost)
+    return actions
 
 def nullHeuristic(state, problem=None):
     """
@@ -201,4 +288,3 @@ bfs = breadthFirstSearch
 dfs = depthFirstSearch
 astar = aStarSearch
 ucs = uniformCostSearch
-
