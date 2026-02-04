@@ -88,6 +88,65 @@ def depthFirstSearch(problem: SearchProblem):
     print("Start's successors:", problem.getSuccessors(problem.getStartState()))
     
     "*** YOUR CODE HERE ***"
+    stack = util.Stack()
+    startState = problem.getStartState()
+    actions = []
+    first_search_node = (startState, actions)
+    print (f"Before pushing: {stack}")
+    stack.push(first_search_node) 
+    print (f"After pushing: {stack}")
+    visited_states = set() 
+
+    # keep going until our queue is empty
+    while not stack.isEmpty():
+        current_node = stack.pop()
+        print (f"After Popping: {stack}")
+
+        current_state = current_node[0]
+        current_actions = current_node[1]
+        
+        print(f"{current_state} current_state NOT updated")
+
+        if problem.isGoalState(current_state):
+            return current_actions
+        
+        if current_state not in visited_states:
+            visited_states.add(current_state)
+        if current_state in visited_states:
+            print(f"{current_state} current_state is updated to visited")
+            #print(f"After adding Visited States: {visited_states}")
+           
+        #successors are basically the children nodes and they contain 3 things: successor state, action, stepCost
+        successors = problem.getSuccessors(current_state) 
+
+        print(f"Successors: {successors}")
+
+        for next_state, action, stepCost in successors:
+            print(f"Next state: {next_state}")
+            if next_state not in visited_states:
+                # visited_states.add(next_state)
+                new_actions = current_actions + [action]
+                next_node = (next_state, new_actions)
+                stack.push(next_node)
+
+    return actions
+
+# def depthFirstSearch(problem: SearchProblem):
+#     """
+#     Search the deepest nodes in the search tree first.
+
+#     Your search algorithm needs to return a list of actions that reaches the
+#     goal. Make sure to implement a graph search algorithm.
+
+#     To get started, you might want to try some of these simple commands to
+#     understand the search problem that is being passed in:
+#     """
+
+#     print("Start:", problem.getStartState())
+#     print("Is the start a goal?", problem.isGoalState(problem.getStartState()))
+#     print("Start's successors:", problem.getSuccessors(problem.getStartState()))
+    
+#     "*** YOUR CODE HERE ***"
     # tree = util.Stack()
 
     # start = problem.getStartState()
@@ -125,7 +184,7 @@ def depthFirstSearch(problem: SearchProblem):
     #         return actions
              
 
-    return []
+   # return []
 
 
 def breadthFirstSearch(problem: SearchProblem):
