@@ -255,14 +255,11 @@ def uniformCostSearch(problem: SearchProblem):
 
         if state not in visited_states:
             visited_states.add(state)
-        else:
-            continue
 
         if problem.isGoalState(state):
             return actions
         
-        if problem.getSuccessors(state):
-            successors = problem.getSuccessors(state)
+        successors = problem.getSuccessors(state)
         
         for next_state, action, stepCost in successors:
             if next_state not in visited_states:
