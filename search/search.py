@@ -169,36 +169,7 @@ def uniformCostSearch(problem: SearchProblem):
     """Search the node of least total cost first."""
     "*** YOUR CODE HERE ***"
 
-    '''
-    pq = util.PriorityQueue()
-    startState = problem.getStartState() 
-    actions = []
-    pq.push((startState, actions), 0) 
-    visited_states = set()
-
-
-    while not pq.isEmpty():
-        node = pq.pop()
-        state = node[0]
-        actions = node[1]
-
-        if state in visited_states:
-           continue
-
-        visited_states.add(state)
-
-        if problem.isGoalState(state):
-            return actions
-        
-        successors = problem.getSuccessors(state)
-        
-        for next_state, action, stepCost in successors:
-            if next_state not in visited_states:
-                new_actions = actions + [action]
-                pq.push((next_state, new_actions), problem.getCostOfActions(new_actions))
     
-    return actions
-    '''
     pq = util.PriorityQueue()
     startState = problem.getStartState() 
     actions = []
