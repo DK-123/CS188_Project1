@@ -458,15 +458,9 @@ def foodHeuristic(state: Tuple[Tuple, List[List]], problem: FoodSearchProblem):
     dots = foodGrid.asList()
     max_cost = 0
 
-    posx = position[0]
-    posy = position[1]
 
     for dot in dots:
-        goalx = dot[0]
-        goaly = dot[1]
-
-        #dot_cost = abs(goalx - posx) + abs(goaly - posy)
-
+       
         dot_cost = mazeDistance(dot, position, problem.startingGameState)
         
         if dot_cost > max_cost:
