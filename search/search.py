@@ -92,44 +92,54 @@ def depthFirstSearch(problem: SearchProblem):
     startState = problem.getStartState()
     actions = []
     first_search_node = (startState, actions)
-    print (f"Before pushing: {stack}")
+    # print (f"Before pushing: {stack}")
     stack.push(first_search_node) 
-    print (f"After pushing: {stack}")
-    visited_states = set() 
+    # print (f"After pushing: {stack}")
+    visited_states = set()
+
+
+
 
     # keep going until our queue is empty
-    while not stack.isEmpty():
+    while stack.isEmpty() == 0:
+
         current_node = stack.pop()
-        print (f"After Popping: {stack}")
+        # print (f"After Popping: {stack}")
 
         current_state = current_node[0]
         current_actions = current_node[1]
         
-        print(f"{current_state} current_state NOT updated")
+        #  print(f"{current_state} current_state NOT updated")
+
+        if current_state in visited_states:
+            continue
+
+        visited_states.add(current_state)
 
         if problem.isGoalState(current_state):
             return current_actions
         
-        if current_state not in visited_states:
-            visited_states.add(current_state)
-        if current_state in visited_states:
-            print(f"{current_state} current_state is updated to visited")
-            #print(f"After adding Visited States: {visited_states}")
+        
+        # if current_state not in visited_states:
+        # if current_state in visited_states:
+        #     print(f"{current_state} current_state is updated to visited")
+        #     #print(f"After adding Visited States: {visited_states}")
            
         #successors are basically the children nodes and they contain 3 things: successor state, action, stepCost
+        
         successors = problem.getSuccessors(current_state) 
 
-        print(f"Successors: {successors}")
+        #  print(f"Successors: {successors}")
 
         for next_state, action, stepCost in successors:
-            print(f"Next state: {next_state}")
+            # print(f"Next state: {next_state}")
             if next_state not in visited_states:
                 # visited_states.add(next_state)
-                new_actions = current_actions + [action]
-                next_node = (next_state, new_actions)
-                stack.push(next_node)
-
-    return actions
+                # new_actions = current_actions + [action]
+                # next_node = (next_state, new_actions)
+                # stack.push(next_node)
+                stack.push((next_state, current_actions + [action]))
+    util.raiseNotDefined()
 
 # def depthFirstSearch(problem: SearchProblem):
 #     """
@@ -242,8 +252,7 @@ def uniformCostSearch(problem: SearchProblem):
     pq = util.PriorityQueue()
     startState = problem.getStartState()
     actions = []
-    totCost = 0
-    pq.push((startState, actions, totCost), 0) 
+    pq.push((startState, actions), 0) 
     visited_states = set()
 
 
@@ -251,7 +260,6 @@ def uniformCostSearch(problem: SearchProblem):
         node = pq.pop()
         state = node[0]
         actions = node[1]
-        totCost = node[2]
 
         if state not in visited_states:
             visited_states.add(state)
@@ -264,8 +272,8 @@ def uniformCostSearch(problem: SearchProblem):
         for next_state, action, stepCost in successors:
             if next_state not in visited_states:
                 new_actions = actions + [action]
-                pq.push((next_state, new_actions, totCost + stepCost), totCost + stepCost)
-    return actions
+                pq.push((next_state, new_actions), problem.getCostOfActions(new_actions))
+    util.raiseNotDefined()
 
 def nullHeuristic(state, problem=None):
     """
