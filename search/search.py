@@ -206,13 +206,23 @@ def nullHeuristic(state, problem=None):
 def aStarSearch(problem: SearchProblem, heuristic=nullHeuristic):
     """Search the node that has the lowest combined cost and heuristic first."""
     "*** YOUR CODE HERE ***"
+    '''
+    Notes:
+    - A Star search algorithm utilizes a heuristic (estimated cost)
+    - Also uses a priority queue
+    - f(n) = g(n) + h(n) where  
+      f(n) = the function representing estimated total cost, used by A* search aka priority
+      g(n) = the function representing total backwards cost computed by UCS
+      h(n) = the heuristic value function (estimated forward cost) used by greedy search
+    '''
     pq = util.PriorityQueue()
     startState = problem.getStartState()
     actions = []
     totalCost = 0
     
     priority = totalCost + heuristic(startState, problem)
-    pq.push((startState, actions, totalCost), priority)
+    first_search_node = (startState, actions, totalCost)
+    pq.push(first_search_node, priority)
     
     visited_states = set()
 
