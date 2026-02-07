@@ -296,14 +296,28 @@ class CornersProblem(search.SearchProblem):
         space)
         """
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        # intially, visited corners is going to be a tuple with all False boolean values since we haven't visited any of the 4 corners yet
+       
+        startPosition = self.startingPosition
+        initial_visited_corners = (False, False, False, False)
+        return (startPosition, initial_visited_corners)
+
 
     def isGoalState(self, state: Any):
         """
         Returns whether this search state is a goal state of the problem.
         """
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        #util.raiseNotDefined()
+        # a search state is a goal state when Pacman has visited all 4 corners
+        
+        visited_corners = state[1]
+
+        for vc in visited_corners:
+            if vc == False:
+                return False
+           
+        return True
 
     def getSuccessors(self, state: Any):
         """
@@ -326,6 +340,27 @@ class CornersProblem(search.SearchProblem):
             #   hitsWall = self.walls[nextx][nexty]
 
             "*** YOUR CODE HERE ***"
+            position = state[0]
+            visited_corners = state[1]
+            x = position[0]
+            y = position[1]
+            dx, dy = Actions.directionToVector(action)
+            nextx = int(x + dx)
+            nexty = int(y + dy)
+            hitsWall = self.walls[nextx][nexty]
+            
+            if not hitsWall: 
+                next_position = (nextx, nexty)
+                next_visited_corners = list(visited_corners)
+
+                for i in range(len(self.corners)):
+                    if next_position == self.corners[i]:
+                        next_visited_corners[i] = True
+                
+                next_visited_corners = tuple(next_visited_corners)  
+                next_state = (next_position, next_visited_corners)
+                next_node = (next_state, action, 1)
+                successors.append(next_node)
 
         self._expanded += 1 # DO NOT CHANGE
         return successors
@@ -361,7 +396,29 @@ def cornersHeuristic(state: Any, problem: CornersProblem):
     walls = problem.walls # These are the walls of the maze, as a Grid (game.py)
 
     "*** YOUR CODE HERE ***"
+     
+    position = state[0]
+    visited_corners = state[1]
+
+    if visited_corners == (True, True, True, True):
+        return 0
+    
+    unvisited_corners = []
+    for i in range(len(corners)):
+        if visited_corners[i] == False:
+            unvisited_corners.append(corners[i])
+    
+    if len(unvisited_corners) != 0:
+        farthest_dist = 0
+        for corner in unvisited_corners:
+            # using the Manhattan distance formula from notes (section 1.4.1): Manhattan(x1, y1, x2, y2) = |x1 - x2| + |y1 - y2|
+            manhattan_dist = abs(position[0] - corner[0]) + abs(position[1] - corner[1])
+            farthest_dist = max(farthest_dist, manhattan_dist)
+        
+        return farthest_dist
+    
     return 0 # Default to trivial solution
+
 
 class AStarCornersAgent(SearchAgent):
     "A SearchAgent for FoodSearchProblem using A* and your foodHeuristic"
